@@ -15,7 +15,7 @@ class HomeView extends StatelessWidget {
           child: Column(
             children: <Widget>[
               CircleAvatar(
-                radius: 100,
+                radius: 80,
                 backgroundImage: NetworkImage(
                   store.picture,
                 ),

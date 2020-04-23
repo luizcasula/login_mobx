@@ -14,8 +14,6 @@ class _SignupViewState extends State<SignupView> {
   final _controller = SignupController();
   var model = SignupViewModel();
 
-  
-
   @override
   Widget build(BuildContext context) {
     AppStore store = Provider.of<AppStore>(context);
@@ -85,24 +83,25 @@ class _SignupViewState extends State<SignupView> {
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
-                        }
+                          print(model.name);
+                          print(model.email);
+                          print(model.password);
 
-                        print(model.name);
-                        print(model.email);
-                        print(model.password);
-
-                        setState(() {});
-                        _controller.create(model).then((data) {
                           setState(() {});
-                          print(data.token);
-                          store.setUser(
-                            data.name,
-                            data.email,
-                            data.picture,
-                            data.token,
-                          );
-                          Navigator.pushNamed(context, "/home");
-                        });
+                          _controller.create(model).then((data) {
+                            setState(() {});
+                            print(data.token);
+                            store.setUser(
+                              data.name,
+                              data.email,
+                              data.picture,
+                              data.token,
+                            );
+                            //Navigator.pushReplacementNamed(context, "/home");
+                            
+                            Navigator.pushNamedAndRemoveUntil(context, "/home", ModalRoute.withName("/"));
+                          });
+                        }
                       },
                     )
             ],
@@ -112,7 +111,6 @@ class _SignupViewState extends State<SignupView> {
     );
   }
 }
-
 
 /*
  @override
