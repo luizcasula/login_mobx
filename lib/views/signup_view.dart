@@ -150,7 +150,7 @@ class _SignupViewState extends State<SignupView> {
                                     fontWeight: FontWeight.w700),
                               ),
                               onTap: () =>
-                                  Navigator.pushNamed(context, "/signup"),
+                                  Navigator.pop(context),
                             )
                           ],
                         )
