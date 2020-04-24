@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       ),
       providers: [
         Provider<AppController>.value(value: AppController()),
-        Provider<SignupController>.value(value: SignupController()),
+        //Provider<SignupController>.value(value: SignupController()),
       ],
     );
   }

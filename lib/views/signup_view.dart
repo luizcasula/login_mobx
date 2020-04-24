@@ -18,7 +18,6 @@ class _SignupViewState extends State<SignupView> {
   @override
   Widget build(BuildContext context) {
     final _controller = Provider.of<AppController>(context);
-    final _controllerView = Provider.of<SignupController>(context);
     return Scaffold(
       //appBar: AppBar(),
       body: Container(
@@ -50,91 +49,93 @@ class _SignupViewState extends State<SignupView> {
                                 fontWeight: FontWeight.w800, fontSize: 28),
                           ),
                         ),
-                        TextFormField(
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            labelText: "Name",
-                          ),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Name invalid';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) => model.name = value,
-                        ),
-                        TextFormField(
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            labelText: "Email",
-                          ),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Email invalid';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) => model.email = value,
-                        ),
-                        TextFormField(
-                          keyboardType: TextInputType.text,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            labelText: "Password",
-                          ),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Password invalid';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) => model.password = value,
-                        ),
+                        Observer(builder: (_) {
+                          return TextFormField(
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              errorText: _controller.signup.validateName(),
+                              labelText: "Name",
+                            ),
+                            //validator: _controller.signup.validateName,
+                            onSaved: (value) => model.name = value,
+                            onChanged: _controller.signup.changeName,
+                          );
+                        }),
+                        Observer(builder: (_) {
+                          return TextFormField(
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              errorText: _controller.signup.validateEmail(),
+                              labelText: "Email",
+                            ),
+                            
+                            onSaved: (value) => model.email = value,
+                            onChanged: _controller.signup.changeEmail,
+                          );
+                        }),
+                        Observer(builder: (_) {
+                          return TextFormField(
+                            keyboardType: TextInputType.text,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              errorText: _controller.signup.validatePassword(),
+                              labelText: "Password",
+                            ),
+                            //validator: _controller.signup.validatePassword,
+                            onSaved: (value) => model.password = value,
+                            onChanged: _controller.signup.changePassword,
+                          );
+                        }),
                         Padding(
                           padding: const EdgeInsets.only(top: 32),
-                          child: model.busy
-                              ? Center(
-                                  child: Container(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                )
-                              : Container(
-                                  width: double.infinity,
-                                  height: 50,
-                                  child: FlatButton(
-                                    color: Theme.of(context).primaryColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5),
-                                      side: BorderSide(color: Colors.purple),
+                          child: Observer(builder: (_) {
+                            return _controller.signup.busy
+                                ? Center(
+                                    child: Container(
+                                      child: CircularProgressIndicator(),
                                     ),
-                                    child: Text(
-                                      "Sing UP",
-                                      style: TextStyle(color: Colors.white),
+                                  )
+                                : Container(
+                                    width: double.infinity,
+                                    height: 50,
+                                    child: RaisedButton(
+                                      color: Theme.of(context).primaryColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        //side: BorderSide(color: Colors.purple),
+                                      ),
+                                      child: Text(
+                                        "SIGN UP",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      onPressed: _controller.signup.isAllValid
+                                          ? () {
+                                              if (_formKey.currentState
+                                                  .validate()) {
+                                                _formKey.currentState.save();
+                                                print(model.name);
+                                                print(model.email);
+                                                print(model.password);
+                                                _controller.signup
+                                                    .create(model)
+                                                    .then((data) {
+                                                  print(data.token);
+                                                  _controller.setUser(
+                                                    data.name,
+                                                    data.email,
+                                                    data.picture,
+                                                    data.token,
+                                                  );
+                                                  Navigator.pushNamed(
+                                                      context, "/home");
+                                                  //Navigator.pushNamedAndRemoveUntil(context, "/home", ModalRoute.withName("/login"));
+                                                });
+                                              }
+                                            }
+                                          : null,
                                     ),
-                                    onPressed: () {
-                                      if (_formKey.currentState.validate()) {
-                                        _formKey.currentState.save();
-                                        print(model.name);
-                                        print(model.email);
-                                        print(model.password);
-
-                                        setState(() {});
-                                        _controller.create(model).then((data) {
-                                          setState(() {});
-                                          print(data.token);
-                                          _controller.setUser(
-                                            data.name,
-                                            data.email,
-                                            data.picture,
-                                            data.token,
-                                          );
-                                          Navigator.pushNamed(context, "/home");
-                                          //Navigator.pushNamedAndRemoveUntil(context, "/home", ModalRoute.withName("/login"));
-                                        });
-                                      }
-                                    },
-                                  ),
-                                ),
+                                  );
+                          }),
                         ),
                         Padding(padding: EdgeInsets.only(top: 120)),
                         Row(
