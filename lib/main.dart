@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:login_mobx/stores/app_store.dart';
+import 'package:login_mobx/controllers/app_controller.dart';
+import 'package:login_mobx/controllers/signup_controller.dart';
 import 'package:login_mobx/views/home_view.dart';
 import 'package:login_mobx/views/login_view.dart';
 import 'package:login_mobx/views/signup_view.dart';
@@ -24,7 +25,10 @@ class MyApp extends StatelessWidget {
           "/signup": (context) => SignupView()
         },
       ),
-      providers: [Provider<AppStore>.value(value: AppStore())],
+      providers: [
+        Provider<AppController>.value(value: AppController()),
+        Provider<SignupController>.value(value: SignupController()),
+      ],
     );
   }
 }

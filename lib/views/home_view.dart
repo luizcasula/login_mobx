@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:login_mobx/stores/app_store.dart';
+import 'package:login_mobx/controllers/app_controller.dart';
 import 'package:provider/provider.dart';
 
 class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AppStore store = Provider.of<AppStore>(context);
+    final _controller = Provider.of<AppController>(context);
 
     return Scaffold(
       appBar: AppBar(),
@@ -17,20 +17,20 @@ class HomeView extends StatelessWidget {
               CircleAvatar(
                 radius: 80,
                 backgroundImage: NetworkImage(
-                  store.picture,
+                  _controller.picture,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 32),
                 child: Text(
-                  store.name,
+                  _controller.name,
                   style: TextStyle(fontSize: 20),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
-                  store.email,
+                  _controller.email,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
                 ),
               ),

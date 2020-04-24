@@ -1,3 +1,4 @@
+/*
 import 'package:mobx/mobx.dart';
 part 'app_store.g.dart';
 
@@ -24,11 +25,6 @@ abstract class _AppStore with Store {
     picture = _picture;
   }
 
-  @action
-  void clear() {
-    name = "";
-    email = "";
-    token = "";
-    picture = "";
-  }
+  
 }
+*/

@@ -17,7 +17,6 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    AppStore store = Provider.of<AppStore>(context);
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(32, 200, 32, 0),

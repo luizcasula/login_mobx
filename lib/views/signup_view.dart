@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:login_mobx/controllers/app_controller.dart';
 import 'package:login_mobx/controllers/signup_controller.dart';
-import 'package:login_mobx/stores/app_store.dart';
 import 'package:login_mobx/view-models/signup_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -11,12 +12,13 @@ class SignupView extends StatefulWidget {
 
 class _SignupViewState extends State<SignupView> {
   final _formKey = GlobalKey<FormState>();
-  final _controller = SignupController();
+
   var model = SignupViewModel();
 
   @override
   Widget build(BuildContext context) {
-    AppStore store = Provider.of<AppStore>(context);
+    final _controller = Provider.of<AppController>(context);
+    final _controllerView = Provider.of<SignupController>(context);
     return Scaffold(
       //appBar: AppBar(),
       body: Container(
@@ -91,12 +93,9 @@ class _SignupViewState extends State<SignupView> {
                         Padding(
                           padding: const EdgeInsets.only(top: 32),
                           child: model.busy
-                              ? Padding(
-                                  padding: const EdgeInsets.all(32),
-                                  child: Center(
-                                    child: Container(
-                                      child: CircularProgressIndicator(),
-                                    ),
+                              ? Center(
+                                  child: Container(
+                                    child: CircularProgressIndicator(),
                                   ),
                                 )
                               : Container(
@@ -123,7 +122,7 @@ class _SignupViewState extends State<SignupView> {
                                         _controller.create(model).then((data) {
                                           setState(() {});
                                           print(data.token);
-                                          store.setUser(
+                                          _controller.setUser(
                                             data.name,
                                             data.email,
                                             data.picture,
@@ -149,8 +148,7 @@ class _SignupViewState extends State<SignupView> {
                                     color: Theme.of(context).primaryColor,
                                     fontWeight: FontWeight.w700),
                               ),
-                              onTap: () =>
-                                  Navigator.pop(context),
+                              onTap: () => Navigator.pop(context),
                             )
                           ],
                         )
@@ -166,18 +164,3 @@ class _SignupViewState extends State<SignupView> {
     );
   }
 }
-
-/*
-Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: GestureDetector(
-                    child: Text(
-                      "Sign Up",
-                      style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.w700),
-                    ),
-                    onTap: () => Navigator.pop(context),
-                  ),
-                )
-*/
